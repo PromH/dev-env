@@ -19,7 +19,7 @@ set -e
 #
 # Git commit from https://github.com/docker/docker-install when
 # the script was uploaded (Should only be modified by upload job):
-SCRIPT_COMMIT_SHA="3255aa3919e7281693f62855b9d543bb50f04957"
+SCRIPT_COMMIT_SHA="b2e29ef7a9a89840d2333637f7d1900a83e7153f"
 
 # strip "v" prefix if present
 VERSION="${VERSION#v}"
@@ -444,6 +444,10 @@ do_install() {
 						# also install the latest version of the "docker scan" cli-plugin (only supported on x86 currently)
 						pkgs="$pkgs docker-scan-plugin"
 				fi
+				# TODO(thaJeztah) remove the $CHANNEL check once 22.06 and docker-buildx-plugin is published to the "stable" channel
+				if [ "$CHANNEL" = "test" ] && version_gte "22.06"; then
+						pkgs="$pkgs docker-buildx-plugin"
+				fi
 				if ! is_dry_run; then
 					set -x
 				fi
@@ -536,6 +540,10 @@ do_install() {
 				if version_gte "20.10"; then
 					pkgs="$pkgs docker-compose-plugin docker-ce-rootless-extras$pkg_version"
 				fi
+				# TODO(thaJeztah) remove the $CHANNEL check once 22.06 and docker-buildx-plugin is published to the "stable" channel
+				if [ "$CHANNEL" = "test" ] && version_gte "22.06"; then
+						pkgs="$pkgs docker-buildx-plugin"
+				fi
 				if ! is_dry_run; then
 					set -x
 				fi
@@ -615,6 +623,10 @@ do_install() {
 				fi
 				if version_gte "20.10"; then
 					pkgs="$pkgs docker-compose-plugin docker-ce-rootless-extras$pkg_version"
+				fi
+				# TODO(thaJeztah) remove the $CHANNEL check once 22.06 and docker-buildx-plugin is published to the "stable" channel
+				if [ "$CHANNEL" = "test" ] && version_gte "22.06"; then
+						pkgs="$pkgs docker-buildx-plugin"
 				fi
 				if ! is_dry_run; then
 					set -x
